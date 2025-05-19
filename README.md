@@ -8,6 +8,12 @@ Este protótipo simula um sistema backend de rastreamento de motos em tempo real
 
 > ⚠️ Este é apenas um protótipo para fins acadêmicos, demonstrando como seria a estrutura de um sistema backend de apoio ao rastreamento de veículos.
 
+## Grupo
+
+- **Leonardo Botelho** – RM: 556110  
+- **Raul Clauson** – RM: 555006  
+- **Mirian Bronzati** – RM: 555041
+
 
 ---
 
