@@ -29,7 +29,7 @@ Este protótipo simula um sistema backend de rastreamento de motos em tempo real
 
 1. Clone o repositório:
    ```
-   git clone https://github.com/seu-usuario/challengejava.git
+   git clone https://github.com/wanderluzter/challengejava.git
 
 2. Acesse a página do projeto.
    ```
