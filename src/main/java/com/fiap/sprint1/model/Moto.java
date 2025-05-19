@@ -1,0 +1,30 @@
+package com.fiap.sprint1.model;
+
+import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import lombok.Data;
+
+@Entity
+@Data
+public class Moto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String placa;
+    private String observacao;
+    private Date dataEntrada;
+    @Lob
+    private byte[] foto;
+    @ManyToOne
+    @JoinColumn(name = "id_tag")
+    private String idTag;
+
+}
