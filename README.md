@@ -44,14 +44,14 @@ Este protótipo simula um sistema backend de rastreamento de motos em tempo real
 
 ## 📌 Endpoints principais
 
-### Entidade 1 - Produtos
+### Entidade 1 - Motos
 - `GET /motos` – Listar todos as motos
 - `GET /motos/{id}` – Buscar moto por ID
 - `POST /motos` – Criar nova moto
 - `PUT /motos/{id}` – Atualizar moto existente
 - `DELETE /motos/{id}` – Deletar moto
 
-### Entidade 2 - Categorias
+### Entidade 2 - Tags
 - `GET /tags` – Listar todas as tags
 - `GET /tags/{id}` – Buscar tag por ID
 - `POST /tags` – Criar nova tag
