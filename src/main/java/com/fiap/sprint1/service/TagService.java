@@ -14,8 +14,8 @@ public class TagService {
     @Autowired
     private TagRepository tagRepository;
 
-    public void saveTag(Tag tag) {
-        tagRepository.save(tag);
+    public Tag saveTag(Tag tag) {
+        return tagRepository.save(tag);
     }
 
     public Tag getTagById(String id) {

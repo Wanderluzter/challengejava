@@ -1,10 +1,12 @@
 package com.fiap.sprint1.controller;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fiap.sprint1.model.Moto;
+import com.fiap.sprint1.model.dto.MotoDto;
 import com.fiap.sprint1.service.MotoService;
 
-
-
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/motos")
@@ -27,33 +28,43 @@ public class MotoController {
     @Autowired
     private MotoService motoService;
 
-    //CRUD 
+    // CRUD
     @GetMapping
-    public Page<Moto> getMotos(Pageable pageable) {
-        return motoService.getAllMotos(pageable);
+    public ResponseEntity<Page<MotoDto>> getMotos(Pageable pageable) {
+        Page<MotoDto> page = motoService.getAllMotos(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
-    public Moto getMoto(@PathVariable Long id){
-        return motoService.getMotoById(id);
+    public ResponseEntity<MotoDto> getMotoById(@PathVariable Long id) {
+        Optional<MotoDto> motoDto = Optional.ofNullable(motoService.getMotoById(id));
+        return motoDto.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Optional<Moto> postMoto(@RequestBody Moto moto) {
-        return motoService.saveMoto(moto);
+    public ResponseEntity<MotoDto> postMoto(@Valid @RequestBody MotoDto dto) {
+        Optional<MotoDto> motoDto = motoService.saveMoto(dto);
+        return motoDto.map(savedMoto -> ResponseEntity.created(URI.create("/motos/" + savedMoto.getId()))
+                .body(savedMoto)).orElse(ResponseEntity.badRequest().build());
     }
 
     @PutMapping("/{id}")
-    public Moto putMoto(@PathVariable Long id, @RequestBody Moto moto) {
-        return motoService.updateMoto(moto);
+    public ResponseEntity<MotoDto> putMoto(@PathVariable Long id, @Valid @RequestBody MotoDto dto) {
+        dto.setId(id);
+        MotoDto updatedMoto = motoService.updateMoto(dto);
+        if (updatedMoto != null) {
+            return ResponseEntity.ok(updatedMoto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMoto(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMoto(@PathVariable Long id) {
         motoService.deleteMoto(id);
+        return ResponseEntity.noContent().build();
     }
 
-    //Busca por parâmetros (Com páginação e ordenação)
-
-
+    // Busca por parâmetros (Com páginação e ordenação)
 }

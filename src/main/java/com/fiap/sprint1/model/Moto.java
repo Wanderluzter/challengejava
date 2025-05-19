@@ -25,6 +25,6 @@ public class Moto {
     private byte[] foto;
     @ManyToOne
     @JoinColumn(name = "id_tag")
-    private String idTag;
+    private Tag tag;
 
 }
