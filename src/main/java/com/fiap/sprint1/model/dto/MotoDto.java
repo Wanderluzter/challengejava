@@ -1,6 +1,6 @@
 package com.fiap.sprint1.model.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fiap.sprint1.model.Tag;
 
@@ -16,7 +16,7 @@ public class MotoDto {
     private String placa;
     @Size(min = 1, max = 100, message = "A observação deve ter entre 1 e 100 caracteres")
     private String observacao;
-    private Date dataEntrada;
+    private LocalDate dataEntrada;
     private byte[] foto;
     private Tag tag;
 

@@ -2,7 +2,9 @@ package com.fiap.sprint1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.fiap.sprint1.model.Tag;
@@ -38,7 +40,8 @@ public class TagService {
         return null;
     }
 
-    public Page<Tag> getTagsBySinal(String sinal, Pageable pageable) {
-        return tagRepository.findBySinalDesc(sinal, pageable);
+    public Page<Tag> getTagsBySinal(Long sinal) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("sinal").descending());
+        return tagRepository.findBySinalLessThanEqual(sinal, pageable);
     }
 }

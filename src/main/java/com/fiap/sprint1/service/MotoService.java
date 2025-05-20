@@ -1,6 +1,6 @@
 package com.fiap.sprint1.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class MotoService {
         return motoRepository.findByPlaca(placa, pageable).map(this::toDto);
     }
 
-    public Page<MotoDto> getMotosByDataEntrada(Date dataEntrada, Pageable pageable) {
+    public Page<MotoDto> getMotosByDataEntrada(LocalDate dataEntrada, Pageable pageable) {
         return motoRepository.findByDataEntradaOrderByDataEntradaAsc(dataEntrada, pageable).map(this::toDto);
     }
 

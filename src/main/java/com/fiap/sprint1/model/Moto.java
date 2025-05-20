@@ -1,6 +1,6 @@
 package com.fiap.sprint1.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +20,7 @@ public class Moto {
     private Long id;
     private String placa;
     private String observacao;
-    private Date dataEntrada;
+    private LocalDate dataEntrada;
     @Lob
     private byte[] foto;
     @ManyToOne

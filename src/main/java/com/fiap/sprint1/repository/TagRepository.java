@@ -8,5 +8,5 @@ import com.fiap.sprint1.model.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, String> {
 
-    Page<Tag> findBySinalDesc(String sinal, Pageable pageable);
+    Page<Tag> findBySinalLessThanEqual(Long sinal, Pageable pageable);
 }
