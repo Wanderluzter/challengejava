@@ -13,5 +13,9 @@ import com.fiap.sprint1.model.Moto;
 public interface MotoRepository extends JpaRepository<Moto, Long> {
 
     Page<Moto> findByPlaca(String placa, Pageable pageable);
+
     Page<Moto> findByDataEntrada(Date dataEntrada, Pageable pageable);
+
+    // Busca personalizada por data com ordecação com a data manis antiga primeiro
+    Page<Moto> findByDataEntradaOrderByDataEntradaAsc(Date dataEntrada, Pageable pageable);
 }

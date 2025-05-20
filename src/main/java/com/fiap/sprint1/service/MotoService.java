@@ -52,12 +52,12 @@ public class MotoService {
         return toDto(updatedMoto);
     }
 
-    public Page<Moto> getMotosByPlaca(String placa, Pageable pageable) {
-        return motoRepository.findByPlaca(placa, pageable);
+    public Page<MotoDto> getMotosByPlaca(String placa, Pageable pageable) {
+        return motoRepository.findByPlaca(placa, pageable).map(this::toDto);
     }
 
-    public Page<Moto> getMotosByDataEntrada(Date dataEntrada, Pageable pageable) {
-        return motoRepository.findByDataEntrada(dataEntrada, pageable);
+    public Page<MotoDto> getMotosByDataEntrada(Date dataEntrada, Pageable pageable) {
+        return motoRepository.findByDataEntradaOrderByDataEntradaAsc(dataEntrada, pageable).map(this::toDto);
     }
 
     public Moto toEntity(MotoDto dto) {

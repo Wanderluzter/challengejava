@@ -1,11 +1,13 @@
 package com.fiap.sprint1.controller;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,4 +69,10 @@ public class MotoController {
     }
 
     // Busca por parâmetros (Com páginação e ordenação)
+    @GetMapping("/data/{dataEntrada}")
+    public ResponseEntity<Page<MotoDto>> getMotosByDataEntrada(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataEntrada, Pageable pageable) {
+        Page<MotoDto> page = motoService.getMotosByDataEntrada(dataEntrada, pageable);
+        return ResponseEntity.ok(page);
+    }
 }

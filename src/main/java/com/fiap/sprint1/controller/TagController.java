@@ -59,4 +59,12 @@ public class TagController {
         return ResponseEntity.noContent().build();
     }
 
+    // Busca por parâmetros (Com páginação e ordenação)
+    // buscar pelo sinal da tag do menor pro maior
+    @GetMapping("/sinal/{sinal}")
+    public ResponseEntity<Page<Tag>> getTagsBySinal(@PathVariable String sinal, Pageable pageable) {
+        Page<Tag> tags = tagService.getTagsBySinal(sinal, pageable);
+        return ResponseEntity.ok(tags);
+    }
+
 }

@@ -37,4 +37,8 @@ public class TagService {
         }
         return null;
     }
+
+    public Page<Tag> getTagsBySinal(String sinal, Pageable pageable) {
+        return tagRepository.findBySinalDesc(sinal, pageable);
+    }
 }
