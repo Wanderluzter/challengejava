@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fiap.sprint1.exception.RecursoLigadoAOutroException;
 import com.fiap.sprint1.exception.RecursoNaoEncontradoException;
 import com.fiap.sprint1.model.Tag;
+import com.fiap.sprint1.model.dto.TagDto;
 import com.fiap.sprint1.repository.MotoRepository;
 import com.fiap.sprint1.repository.TagRepository;
 
@@ -23,12 +24,15 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public Tag saveTag(Tag tag) {
-        return tagRepository.save(tag);
+    public TagDto saveTag(TagDto dto) {
+        Tag tag = toEntity(dto);
+        return toDto(tagRepository.save(tag));
     }
 
-    public Tag getTagById(String id) {
-        return tagRepository.findById(id).orElse(null);
+    public TagDto getTagById(String id) {
+        return tagRepository.findById(id)
+                .map(this::toDto)
+                .orElse(null);
     }
 
     public void deleteTag(String id) {
@@ -42,20 +46,39 @@ public class TagService {
         tagRepository.delete(tag);
     }
 
-    public Page<Tag> getAllTags(Pageable pageable) {
-        return tagRepository.findAll(pageable);
+    public Page<TagDto> getAllTags(Pageable pageable) {
+        return tagRepository.findAll(pageable)
+                .map(this::toDto);
     }
 
-    public Tag updateTag(String id, Tag tag) {
+    public TagDto updateTag(String id, TagDto dto) {
         if (tagRepository.existsById(id)) {
+            Tag tag = toEntity(dto);
             tag.setId(id);
-            return tagRepository.save(tag);
+            return toDto(tagRepository.save(tag));
         }
         return null;
     }
 
-    public Page<Tag> getTagsBySinal(Long sinal) {
+    public Page<TagDto> getTagsBySinal(Long sinal) {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("sinal").descending());
-        return tagRepository.findBySinalLessThanEqual(sinal, pageable);
+        return tagRepository.findBySinalLessThanEqual(sinal, pageable)
+                .map(this::toDto);
+    }
+
+    // toDto
+    public TagDto toDto(Tag tag) {
+        TagDto dto = new TagDto();
+        dto.setId(tag.getId());
+        dto.setSinal(tag.getSinal());
+        return dto;
+    }
+
+    // toEntity
+    public Tag toEntity(TagDto dto) {
+        Tag tag = new Tag();
+        tag.setId(dto.getId());
+        tag.setSinal(dto.getSinal());
+        return tag;
     }
 }
