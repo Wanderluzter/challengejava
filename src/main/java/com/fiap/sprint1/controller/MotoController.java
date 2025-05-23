@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fiap.sprint1.exception.RecursoNaoEncontradoException;
 import com.fiap.sprint1.model.dto.MotoDto;
 import com.fiap.sprint1.service.MotoService;
 
@@ -34,6 +35,9 @@ public class MotoController {
     @GetMapping
     public ResponseEntity<Page<MotoDto>> getMotos(Pageable pageable) {
         Page<MotoDto> page = motoService.getAllMotos(pageable);
+        if (page.isEmpty()) {
+            throw new RecursoNaoEncontradoException("Nenhuma moto encontrada.");
+        }
         return ResponseEntity.ok(page);
     }
 
@@ -41,7 +45,7 @@ public class MotoController {
     public ResponseEntity<MotoDto> getMotoById(@PathVariable Long id) {
         Optional<MotoDto> motoDto = Optional.ofNullable(motoService.getMotoById(id));
         return motoDto.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Moto " + id + " não encontrada"));
     }
 
     @PostMapping
@@ -55,15 +59,20 @@ public class MotoController {
     public ResponseEntity<MotoDto> putMoto(@PathVariable Long id, @Valid @RequestBody MotoDto dto) {
         dto.setId(id);
         MotoDto updatedMoto = motoService.updateMoto(dto);
-        if (updatedMoto != null) {
-            return ResponseEntity.ok(updatedMoto);
-        } else {
-            return ResponseEntity.notFound().build();
+
+        if (updatedMoto == null) {
+            throw new RecursoNaoEncontradoException("Moto " + id + " não encontrada");
         }
+
+        return ResponseEntity.ok(updatedMoto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMoto(@PathVariable Long id) {
+        Optional<MotoDto> motoDto = Optional.ofNullable(motoService.getMotoById(id));
+        if (motoDto.isEmpty()) {
+            throw new RecursoNaoEncontradoException("Moto " + id + " não encontrada");
+        }
         motoService.deleteMoto(id);
         return ResponseEntity.noContent().build();
     }
@@ -73,6 +82,9 @@ public class MotoController {
     public ResponseEntity<Page<MotoDto>> getMotosByDataEntrada(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEntrada, Pageable pageable) {
         Page<MotoDto> page = motoService.getMotosByDataEntrada(dataEntrada, pageable);
+        if (page.isEmpty()) {
+            throw new RecursoNaoEncontradoException("Nenhuma moto encontrada com a data de entrada " + dataEntrada);
+        }
         return ResponseEntity.ok(page);
     }
 }
