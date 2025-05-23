@@ -41,4 +41,16 @@ public class GlobalExceptionHandler {
                 .body(erroResposta);
     }
 
+    @ExceptionHandler(RecursoLigadoAOutroException.class)
+    public ResponseEntity<ErroResposta> handleRecursoLigadoAOutro(RecursoLigadoAOutroException ex) {
+        ErroResposta erro = new ErroResposta("Recurso em uso", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<ErroResposta> handleRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
+        ErroResposta erro = new ErroResposta("Não encontrado", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
 }

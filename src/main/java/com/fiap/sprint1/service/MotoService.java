@@ -72,7 +72,8 @@ public class MotoService {
     }
 
     public Page<MotoDto> getMotosByDataEntrada(LocalDate dataEntrada, Pageable pageable) {
-        return motoRepository.findByDataEntradaOrderByDataEntradaAsc(dataEntrada, pageable).map(this::toDto);
+        return motoRepository.findByDataEntradaGreaterThanEqualOrderByDataEntradaDesc(dataEntrada, pageable)
+                .map(this::toDto);
     }
 
     @Autowired
@@ -86,7 +87,6 @@ public class MotoService {
         moto.setDataEntrada(dto.getDataEntrada());
         moto.setFotos(dto.getFotos());
 
-        // Buscar a tag pelo ID
         if (dto.getTag() != null && dto.getTag().getId() != null) {
             Tag tag = tagRepository.findById(dto.getTag().getId())
                     .orElseThrow(

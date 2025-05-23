@@ -1,20 +1,27 @@
 package com.fiap.sprint1.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.fiap.sprint1.exception.RecursoLigadoAOutroException;
+import com.fiap.sprint1.exception.RecursoNaoEncontradoException;
 import com.fiap.sprint1.model.Tag;
+import com.fiap.sprint1.repository.MotoRepository;
 import com.fiap.sprint1.repository.TagRepository;
 
 @Service
 public class TagService {
 
-    @Autowired
-    private TagRepository tagRepository;
+    private final MotoRepository motoRepository;
+    private final TagRepository tagRepository;
+
+    public TagService(MotoRepository motoRepository, TagRepository tagRepository) {
+        this.motoRepository = motoRepository;
+        this.tagRepository = tagRepository;
+    }
 
     public Tag saveTag(Tag tag) {
         return tagRepository.save(tag);
@@ -25,7 +32,14 @@ public class TagService {
     }
 
     public void deleteTag(String id) {
-        tagRepository.deleteById(id);
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tag com ID " + id + " não encontrada."));
+
+        if (motoRepository.existsByTag(tag)) {
+            throw new RecursoLigadoAOutroException("A tag está associada a uma ou mais motos e não pode ser deletada.");
+        }
+
+        tagRepository.delete(tag);
     }
 
     public Page<Tag> getAllTags(Pageable pageable) {

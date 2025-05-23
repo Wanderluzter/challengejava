@@ -81,10 +81,14 @@ public class MotoController {
     @GetMapping("/data/{dataEntrada}")
     public ResponseEntity<Page<MotoDto>> getMotosByDataEntrada(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEntrada, Pageable pageable) {
+
         Page<MotoDto> page = motoService.getMotosByDataEntrada(dataEntrada, pageable);
+
         if (page.isEmpty()) {
-            throw new RecursoNaoEncontradoException("Nenhuma moto encontrada com a data de entrada " + dataEntrada);
+            throw new RecursoNaoEncontradoException(
+                    "Nenhuma moto encontrada com a data de entrada a partir de " + dataEntrada);
         }
         return ResponseEntity.ok(page);
     }
+
 }

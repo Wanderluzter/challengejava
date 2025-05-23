@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.fiap.sprint1.model.Moto;
+import com.fiap.sprint1.model.Tag;
 
 @Repository
 public interface MotoRepository extends JpaRepository<Moto, Long> {
@@ -16,6 +17,7 @@ public interface MotoRepository extends JpaRepository<Moto, Long> {
 
     Page<Moto> findByDataEntrada(LocalDate dataEntrada, Pageable pageable);
 
-    // Busca personalizada por data com ordecação com a data manis antiga primeiro
-    Page<Moto> findByDataEntradaOrderByDataEntradaAsc(LocalDate dataEntrada, Pageable pageable);
+    Page<Moto> findByDataEntradaGreaterThanEqualOrderByDataEntradaDesc(LocalDate dataEntrada, Pageable pageable);
+
+    public boolean existsByTag(Tag tag);
 }

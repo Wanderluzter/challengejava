@@ -55,8 +55,8 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTag(@PathVariable String id) {
-        tagService.deleteTag(id);
-        return ResponseEntity.noContent().build();
+        tagService.deleteTag(id); // Lança exceções se necessário
+        return ResponseEntity.noContent().build(); // 204 No Content se deletar com sucesso
     }
 
     // Busca por parâmetros (Com páginação e ordenação)
