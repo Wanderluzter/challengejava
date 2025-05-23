@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fiap.sprint1.model.Tag;
+import com.fiap.sprint1.model.dto.TagDto;
 import com.fiap.sprint1.service.TagService;
 
 import jakarta.validation.Valid;
@@ -26,26 +26,30 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping
-    public ResponseEntity<Page<Tag>> getTags(Pageable pageable) {
-        Page<Tag> tags = tagService.getAllTags(pageable);
+    public ResponseEntity<Page<TagDto>> getTags(Pageable pageable) {
+        Page<TagDto> tags = tagService.getAllTags(pageable);
         return ResponseEntity.ok(tags);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tag> getTag(@PathVariable String id) {
-        Tag tag = tagService.getTagById(id);
-        return ResponseEntity.ok(tag);
+    public ResponseEntity<TagDto> getTag(@PathVariable String id) {
+        TagDto tag = tagService.getTagById(id);
+        if (tag != null) {
+            return ResponseEntity.ok(tag);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Tag> postTag(@RequestBody Tag tag) {
-        Tag savedTag = tagService.saveTag(tag);
+    public ResponseEntity<TagDto> postTag(@Valid @RequestBody TagDto tagDto) {
+        TagDto savedTag = tagService.saveTag(tagDto);
         return ResponseEntity.ok(savedTag);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tag> putTag(@PathVariable String id, @Valid @RequestBody Tag tag) {
-        Tag updatedTag = tagService.updateTag(id, tag);
+    public ResponseEntity<TagDto> putTag(@PathVariable String id, @Valid @RequestBody TagDto tagDto) {
+        TagDto updatedTag = tagService.updateTag(id, tagDto);
         if (updatedTag != null) {
             return ResponseEntity.ok(updatedTag);
         } else {
@@ -55,16 +59,14 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTag(@PathVariable String id) {
-        tagService.deleteTag(id); // Lança exceções se necessário
+        tagService.deleteTag(id);
         return ResponseEntity.noContent().build(); // 204 No Content se deletar com sucesso
     }
 
-    // Busca por parâmetros (Com páginação e ordenação)
-    // buscar pelo sinal da tag do menor pro maior
+    // Busca por sinal com paginação e ordenação decrescente por "sinal"
     @GetMapping("/sinal/{sinal}")
-    public ResponseEntity<Page<Tag>> getTagsBySinal(@PathVariable Long sinal) {
-        Page<Tag> tags = tagService.getTagsBySinal(sinal);
+    public ResponseEntity<Page<TagDto>> getTagsBySinal(@PathVariable Long sinal) {
+        Page<TagDto> tags = tagService.getTagsBySinal(sinal);
         return ResponseEntity.ok(tags);
     }
-
 }
